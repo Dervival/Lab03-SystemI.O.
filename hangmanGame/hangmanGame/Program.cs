@@ -252,5 +252,14 @@ namespace hangmanGame
             CreateTextFile(target, newWordBank);
             return;
         }
+
+        public static string[] SelectRandomWordFromBank(string path)
+        {
+            string[] wordBankContents = ReadTextFile(path);
+            //Random class documentation - https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2
+            Random rand = new Random();
+            int randomIndex = rand.Next(wordBankContents.Length);
+            return wordBankContents[randomIndex];
+        }
     }
 }
