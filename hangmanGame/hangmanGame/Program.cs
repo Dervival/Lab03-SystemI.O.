@@ -186,7 +186,7 @@ namespace hangmanGame
                         fileContents = ReadTextFile(target);
                         break;
                     case 2:
-                        RemoveWordFromWordBank(target, fileContents);
+                        ChooseWordForRemoval(target, fileContents);
                         fileContents = ReadTextFile(target);
                         break;
                     case 3:
@@ -205,7 +205,7 @@ namespace hangmanGame
             AppendToTextFile(target, userInput);
         }
 
-        public static void RemoveWordFromWordBank(string target, string[] wordBankContents)
+        public static void ChooseWordForRemoval(string target, string[] wordBankContents)
         {
             int numberofWords = wordBankContents.Length;
             if(numberofWords < 2)
@@ -232,19 +232,25 @@ namespace hangmanGame
             }
             else
             {
-                int userIndex = userChoice - 1;
-                string[] newWordBank = new string[numberofWords - 1];
-                for(int i = 0; i < userIndex; i++)
-                {
-                    newWordBank[i] = wordBankContents[i];
-                }
-                for(int i = userIndex+1; i < numberofWords; i++)
-                {
-                    newWordBank[i - 1] = wordBankContents[i];
-                }
-                CreateTextFile(target, newWordBank);
+                RemoveWordFromBank(target, wordBankContents, userChoice - 1);
                 return;
             }
+        }
+
+        public static void RemoveWordFromBank(string target, string[] wordBankContents, int index)
+        {
+            int numberofWords = wordBankContents.Length;
+            string[] newWordBank = new string[numberofWords - 1];
+            for (int i = 0; i < index; i++)
+            {
+                newWordBank[i] = wordBankContents[i];
+            }
+            for (int i = index + 1; i < numberofWords; i++)
+            {
+                newWordBank[i - 1] = wordBankContents[i];
+            }
+            CreateTextFile(target, newWordBank);
+            return;
         }
     }
 }
