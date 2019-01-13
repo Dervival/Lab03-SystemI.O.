@@ -27,28 +27,17 @@ namespace hangmanGame
             //{
             //    Console.WriteLine(wordBankContents[i]);
             //}
+            Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
+            Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
+            Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
+            Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
         }
 
-        public static int Test()
-        {
-            return 1;
-        }
-
-        public static void CreateTextFile(string target, string[] words)
-        {
-            if (words.Length > 0)
-            {
-                CreateTextFile(target, words[0]);
-                if (words.Length > 1)
-                {
-                    for (int i = 1; i < words.Length; i++)
-                    {
-                        AppendToTextFile(target, words[i]);
-                    }
-                }
-            }
-        }
-
+        /// <summary>
+        /// Creates a new text file containing the content of text.
+        /// </summary>
+        /// <param name="target">Path to file being created.</param>
+        /// <param name="words">String to write to the new text file.</param>
         public static void CreateTextFile(string target, string text)
         {
             //Multiple ways stream I/O can throw exceptions - most common will be IOException or NotSupportedExceptions
@@ -67,20 +56,45 @@ namespace hangmanGame
                     }
                 }
             }
-            catch(IOException e)
+            catch (IOException e)
             {
                 Console.WriteLine("IOException occurred: " + e);
             }
-            catch(NotSupportedException e)
+            catch (NotSupportedException e)
             {
                 Console.WriteLine("NotSupportedException occurred: " + e);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Generic exception occurred: " + e);
             }
         }
 
+        /// <summary>
+        /// Creates a new text file that contains the content contained in words - each value in words will be written on a separate line.
+        /// </summary>
+        /// <param name="target">Path to file being created.</param>
+        /// <param name="words">Array of strings to write to the new text file.</param>
+        public static void CreateTextFile(string target, string[] words)
+        {
+            if (words.Length > 0)
+            {
+                CreateTextFile(target, words[0]);
+                if (words.Length > 1)
+                {
+                    for (int i = 1; i < words.Length; i++)
+                    {
+                        AppendToTextFile(target, words[i]);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Takes in a text file, translates its contents into an array of strings, and returns the array. If an exception occurs, returns an empty array.
+        /// </summary>
+        /// <param name="target">Path to the file being read.</param>
+        /// <returns></returns>
         public static string[] ReadTextFile(string target)
         {
             string[] readLines = new string[] { };
@@ -103,6 +117,11 @@ namespace hangmanGame
             return readLines;
         }
 
+        /// <summary>
+        /// Appends the given string text to the targeted file.
+        /// </summary>
+        /// <param name="target">Path to targeted file.</param>
+        /// <param name="text">Text to append to file.</param>
         public static void AppendToTextFile(string target, string text)
         {
             try
@@ -126,6 +145,11 @@ namespace hangmanGame
             }
         }
 
+        /// <summary>
+        /// Appends the given array of strings to the targeted file, line by line.
+        /// </summary>
+        /// <param name="target">Path to targeted file.</param>
+        /// <param name="text">Text to append to file.</param>
         public static void AppendToTextFile(string target, string[] lines)
         {
             for(int i = 0; i < lines.Length; i++)
@@ -134,6 +158,10 @@ namespace hangmanGame
             }
         }
 
+        /// <summary>
+        /// Deletes the targeted file.
+        /// </summary>
+        /// <param name="target">Path to file to be deleted.</param>
         public static void DeleteTextFile(string target)
         {
             try
@@ -154,6 +182,10 @@ namespace hangmanGame
             }
         }
 
+        /// <summary>
+        /// Shows the user the current state of the word bank and lets them add or remove words.
+        /// </summary>
+        /// <param name="target">Path to the file containing the word bank.</param>
         public static void SelectWordBankUpdateAction(string target)
         {
             string[] fileContents = ReadTextFile(target);
@@ -198,6 +230,10 @@ namespace hangmanGame
             }
         }
 
+        /// <summary>
+        /// Adds a word to the word bank based on user input.
+        /// </summary>
+        /// <param name="target">Path to the file containing the word bank.</param>
         public static void AddWordToWordBank(string target)
         {
             Console.WriteLine("\nWhat word would you like to add?");
@@ -253,7 +289,7 @@ namespace hangmanGame
             return;
         }
 
-        public static string[] SelectRandomWordFromBank(string path)
+        public static string SelectRandomWordFromBank(string path)
         {
             string[] wordBankContents = ReadTextFile(path);
             //Random class documentation - https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2
