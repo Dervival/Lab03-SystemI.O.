@@ -19,7 +19,7 @@ namespace hangmanGame
             {
                 Console.WriteLine(wordBankContents[i]);
             }
-            SelectWordBankUpdateAction(wordBankPath);
+            //SelectWordBankUpdateAction(wordBankPath);
             //AppendToTextFile(wordBankPath, wordBankAddition);
             //wordBankContents = ReadTextFile(wordBankPath);
             //Console.WriteLine("Word bank currently contains: ");
@@ -27,10 +27,10 @@ namespace hangmanGame
             //{
             //    Console.WriteLine(wordBankContents[i]);
             //}
-            Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
-            Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
-            Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
-            Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
+            //Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
+            //Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
+            //Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
+            RunHangmanGame(SelectRandomWordFromBank(wordBankPath));
         }
 
         /// <summary>
@@ -236,9 +236,10 @@ namespace hangmanGame
         /// <param name="target">Path to the file containing the word bank.</param>
         public static void AddWordToWordBank(string target)
         {
-            Console.WriteLine("\nWhat word would you like to add?");
+            Console.WriteLine("\nWhat word would you like to add? Only the first word entered will be added.");
             string userInput = Console.ReadLine();
-            AppendToTextFile(target, userInput);
+            string[] inputArray = userInput.Split(" ");
+            AppendToTextFile(target, inputArray[0]);
         }
 
         public static void ChooseWordForRemoval(string target, string[] wordBankContents)
@@ -272,7 +273,12 @@ namespace hangmanGame
                 return;
             }
         }
-
+        /// <summary>
+        /// Removes a word from the word bank based on the index selected.
+        /// </summary>
+        /// <param name="target">Path to the file being modified.</param>
+        /// <param name="wordBankContents">Contents of the word bank to delete the word from.</param>
+        /// <param name="index">Index of word to be deleted.</param>
         public static void RemoveWordFromBank(string target, string[] wordBankContents, int index)
         {
             int numberofWords = wordBankContents.Length;
@@ -288,7 +294,11 @@ namespace hangmanGame
             CreateTextFile(target, newWordBank);
             return;
         }
-
+        /// <summary>
+        /// Given a wordbank, selects a random word and returns it. 
+        /// </summary>
+        /// <param name="path">Path to the word bank file.</param>
+        /// <returns>A random word from the word bank.</returns>
         public static string SelectRandomWordFromBank(string path)
         {
             string[] wordBankContents = ReadTextFile(path);
@@ -296,6 +306,97 @@ namespace hangmanGame
             Random rand = new Random();
             int randomIndex = rand.Next(wordBankContents.Length);
             return wordBankContents[randomIndex];
+        }
+
+        public static void RunHangmanGame(string actualWord)
+        {
+            bool[] charExistsInWord = new bool[26];
+            char[] charArray = actualWord.ToLower().ToCharArray();
+            for(int i = 0; i < charArray.Length; i++)
+            {
+                int intChar = Convert.ToInt32(charArray[i]);
+                //ASCII 'a' converts to 97, 'z' to 122
+                if(intChar > 96 && intChar < 123)
+                {
+                    charExistsInWord[intChar - 97] = true;
+                }
+            }
+            bool[] charGuessed = new bool[26];
+            int guessesRemaining = 26;
+            while (guessesRemaining > 0)
+            {
+                Console.WriteLine("You have " + guessesRemaining + " guesses remaining");
+                bool validGuess = false;
+                while (!validGuess)
+                {
+                    Console.WriteLine("Word being guessed: ");
+                    for (int i = 0; i < charArray.Length; i++)
+                    {
+                        Console.Write(charArray[i]);
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine("Current state of word being guessed");
+                    for (int i = 0; i < charArray.Length; i++)
+                    {
+                        int intChar = Convert.ToInt32(charArray[i]) - 97;
+                        if (intChar > -1 && intChar < 26)
+                        {
+                            if (charGuessed[intChar])
+                            {
+                                Console.Write(charArray[i]);
+                            }
+                            else
+                            {
+                                Console.Write("_");
+                            }
+                        }
+                    }
+                    Console.Write("\nPreviously guessed letters: ");
+                    for (int i = 0; i < charGuessed.Length; i++)
+                    {
+                        if (charGuessed[i] == true)
+                        {
+                            Console.Write(Convert.ToChar(i + 97) + ", ");
+                        }
+                    }
+                    Console.WriteLine("\nGuess a letter");
+                    string userInput = Console.ReadLine();
+                    int userChoiceInt;
+                    if (userInput == "")
+                    {
+                        userChoiceInt = -1;
+                    }
+                    else
+                    { 
+                        char userChoice = userInput.ToCharArray()[0];
+                        userChoiceInt = Convert.ToInt32(userChoice) - 97;
+                    }
+                    if (userChoiceInt > -1 && userChoiceInt < 26)
+                    {
+                        charGuessed[userChoiceInt] = true;
+                        validGuess = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input - try again\n");
+                    }
+                }
+                guessesRemaining--;
+                bool wordComplete = true;
+                for(int i = 0; i < charExistsInWord.Length; i++)
+                {
+                    //Console.WriteLine("At index " + i + ", charExistsInWord is " + charExistsInWord[i] + " and charGuessed is " + charGuessed[i]);
+                    if(charExistsInWord[i] == true && charGuessed[i] == false)
+                    {
+                        wordComplete = false;
+                    }
+                }
+                if (wordComplete)
+                {
+                    Console.WriteLine("Congratulations you win");
+                    return;
+                }
+            }
         }
     }
 }
