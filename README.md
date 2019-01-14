@@ -52,6 +52,6 @@ Repository for the System Input/Output lab for CodeFellows dn-401d6 course - wor
 - Congratulations you win
 
 #### Screen captures:
-- ![Initial state of game](https://github.com/Dervival/Lab03-SystemI.O/blob/master/InitialGame.PNG);
-- ![Final state of won game](https://github.com/Dervival/Lab03-SystemI.O/blob/master/FinishedGame.PNG);
+- ![Initial state of game](https://github.com/Dervival/Lab03-SystemI.O./blob/master/InitialGame.PNG)
+- ![Final state of won game](https://github.com/Dervival/Lab03-SystemI.O./blob/master/FinishedGame.PNG)
 
