@@ -7,8 +7,7 @@ namespace hangmanGame
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            //basic CRUD tests through the terminal - create the word bank wordbank.txt, read the initial contents, add a new line, read the new state of contents, delete the word bank
+            //By default, looks for a wordbank.txt file in the same folder as Program.cs. If it doesn't exist, create it with default words.
             string wordBankPath = "../../../wordbank.txt";
             string[] wordBankInitial = new string[] { "hello", "kitten", "example", "ghoti" };
             if (!File.Exists(wordBankPath))
@@ -16,26 +15,12 @@ namespace hangmanGame
                 CreateTextFile(wordBankPath, wordBankInitial);
             }
             RunHangmanMenu(wordBankPath);
-            //string[] wordBankContents = ReadTextFile(wordBankPath);
-            //Console.WriteLine("Word bank currently contains: ");
-            //for(int i = 0; i < wordBankContents.Length; i++)
-            //{
-            //    Console.WriteLine(wordBankContents[i]);
-            //}
-            //SelectWordBankUpdateAction(wordBankPath);
-            //AppendToTextFile(wordBankPath, wordBankAddition);
-            //wordBankContents = ReadTextFile(wordBankPath);
-            //Console.WriteLine("Word bank currently contains: ");
-            //for (int i = 0; i < wordBankContents.Length; i++)
-            //{
-            //    Console.WriteLine(wordBankContents[i]);
-            //}
-            //Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
-            //Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
-            //Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
-            
         }
 
+        /// <summary>
+        /// Basic menu for deciding between playing the game, viewing/updating the word bank, and exiting the program.
+        /// </summary>
+        /// <param name="wordBankPath">The path to the word bank that the hangman game uses.</param>
         static void RunHangmanMenu(string wordBankPath)
         {
             Console.WriteLine("Welcome to my word guessing game.");
@@ -275,6 +260,11 @@ namespace hangmanGame
             AppendToTextFile(target, inputArray[0]);
         }
 
+        /// <summary>
+        /// Allows a user to choose a word to delete by index.
+        /// </summary>
+        /// <param name="target">Path to the file containing the word bank.</param>
+        /// <param name="wordBankContents">Contents of the word bank contained at target path.</param>
         public static void ChooseWordForRemoval(string target, string[] wordBankContents)
         {
             int numberofWords = wordBankContents.Length;
@@ -306,6 +296,7 @@ namespace hangmanGame
                 return;
             }
         }
+
         /// <summary>
         /// Removes a word from the word bank based on the index selected.
         /// </summary>
@@ -327,6 +318,7 @@ namespace hangmanGame
             CreateTextFile(target, newWordBank);
             return;
         }
+
         /// <summary>
         /// Given a wordbank, selects a random word and returns it. 
         /// </summary>
@@ -341,6 +333,11 @@ namespace hangmanGame
             return wordBankContents[randomIndex];
         }
 
+        /// <summary>
+        /// Runs the hangman game, using a random word (returned from SelectRandomWordFromBank)
+        /// If reworked, break this into multiple methods; this is really hacked together
+        /// </summary>
+        /// <param name="actualWord">A word picked from the word bank/param>
         public static void RunHangmanGame(string actualWord)
         {
             bool[] charExistsInWord = new bool[26];
@@ -362,13 +359,6 @@ namespace hangmanGame
                 bool validGuess = false;
                 while (!validGuess)
                 {
-                    // Debug only - prints out the word being guessed
-                    //Console.WriteLine("Word being guessed: ");
-                    //for (int i = 0; i < charArray.Length; i++)
-                    //{
-                    //    Console.Write(charArray[i]);
-                    //}
-                    //Console.WriteLine();
                     Console.WriteLine("Current state of word being guessed");
                     for (int i = 0; i < charArray.Length; i++)
                     {

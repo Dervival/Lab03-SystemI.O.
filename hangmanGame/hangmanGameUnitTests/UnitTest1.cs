@@ -101,20 +101,28 @@ namespace hangmanGameUnitTests
             //assert
             Assert.Equal("test2", testContents[0]);
         }
-        //[Fact]
-        //public void EnsureSelectRandomWordsComesFromBank()
-        //{
-        //    //arrange
-        //    string testPath = "test.txt";
-        //    string[] testText = new string[] { "test1", "test2", "test3" };
-        //    //act
-        //    Program.CreateTextFile(testPath, testText);
-        //    string[] testContents = Program.ReadTextFile(testPath);
-        //    Program.RemoveWordFromBank(testPath, testContents, 0);
-        //    testContents = Program.ReadTextFile(testPath);
 
-        //    //assert
-        //    Assert.Equal("test2", testContents[0]);
-        //}
+        [Fact]
+        public void EnsureSelectRandomWordsComesFromBank()
+        {
+            //arrange
+            string testPath = "test.txt";
+            string[] testText = new string[] { "test1", "test2", "test3" };
+            //act
+            Program.CreateTextFile(testPath, testText);
+            string[] testContents = Program.ReadTextFile(testPath);
+            string testRandom = Program.SelectRandomWordFromBank(testPath);
+            testContents = Program.ReadTextFile(testPath);
+            bool foundWord = false;
+            for(int i = 0; i < testContents.Length; i++)
+            {
+                if(testContents[i] == testRandom)
+                {
+                    foundWord = true;
+                }
+            }
+            //assert
+            Assert.True(foundWord);
+        }
     }
 }
