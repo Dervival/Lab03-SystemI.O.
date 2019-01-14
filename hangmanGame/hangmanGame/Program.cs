@@ -10,15 +10,18 @@ namespace hangmanGame
             Console.WriteLine("Hello World!");
             //basic CRUD tests through the terminal - create the word bank wordbank.txt, read the initial contents, add a new line, read the new state of contents, delete the word bank
             string wordBankPath = "../../../wordbank.txt";
-            string[] wordBankInitial = new string[] { "Created empty file", "Hello world", "Goodbye" };
-            string wordBankAddition = "New line to be added";
-            CreateTextFile(wordBankPath, wordBankInitial);
-            string[] wordBankContents = ReadTextFile(wordBankPath);
-            Console.WriteLine("Word bank currently contains: ");
-            for(int i = 0; i < wordBankContents.Length; i++)
+            string[] wordBankInitial = new string[] { "hello", "kitten", "example", "ghoti" };
+            if (!File.Exists(wordBankPath))
             {
-                Console.WriteLine(wordBankContents[i]);
+                CreateTextFile(wordBankPath, wordBankInitial);
             }
+            RunHangmanMenu(wordBankPath);
+            //string[] wordBankContents = ReadTextFile(wordBankPath);
+            //Console.WriteLine("Word bank currently contains: ");
+            //for(int i = 0; i < wordBankContents.Length; i++)
+            //{
+            //    Console.WriteLine(wordBankContents[i]);
+            //}
             //SelectWordBankUpdateAction(wordBankPath);
             //AppendToTextFile(wordBankPath, wordBankAddition);
             //wordBankContents = ReadTextFile(wordBankPath);
@@ -30,7 +33,37 @@ namespace hangmanGame
             //Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
             //Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
             //Console.WriteLine(SelectRandomWordFromBank(wordBankPath));
-            RunHangmanGame(SelectRandomWordFromBank(wordBankPath));
+            
+        }
+
+        static void RunHangmanMenu(string wordBankPath)
+        {
+            Console.WriteLine("Welcome to my word guessing game.");
+            bool keepRunning = true;
+            while (keepRunning)
+            {
+                Console.WriteLine("\nPlease select a menu option");
+                Console.WriteLine("1. Play game");
+                Console.WriteLine("2. View, add, or remove words");
+                Console.WriteLine("3. Exit game");
+                string userInput = Console.ReadLine();
+                switch (userInput)
+                {
+                    case "1":
+                        RunHangmanGame(SelectRandomWordFromBank(wordBankPath));
+                        break;
+                    case "2":
+                        SelectWordBankUpdateAction(wordBankPath);
+                        break;
+                    case "3":
+                        keepRunning = false;
+                        break;
+                    default:
+                        Console.WriteLine("Sorry, I didn't understand that input. Please try again.");
+                        break;
+                }
+            }
+            
         }
 
         /// <summary>
@@ -329,12 +362,13 @@ namespace hangmanGame
                 bool validGuess = false;
                 while (!validGuess)
                 {
-                    Console.WriteLine("Word being guessed: ");
-                    for (int i = 0; i < charArray.Length; i++)
-                    {
-                        Console.Write(charArray[i]);
-                    }
-                    Console.WriteLine();
+                    // Debug only - prints out the word being guessed
+                    //Console.WriteLine("Word being guessed: ");
+                    //for (int i = 0; i < charArray.Length; i++)
+                    //{
+                    //    Console.Write(charArray[i]);
+                    //}
+                    //Console.WriteLine();
                     Console.WriteLine("Current state of word being guessed");
                     for (int i = 0; i < charArray.Length; i++)
                     {
